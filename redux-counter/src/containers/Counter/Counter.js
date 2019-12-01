@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
+import * as actionTypes from '../../store/actionTypes'; 
 
 class Counter extends Component {
     state = {
@@ -34,7 +35,7 @@ class Counter extends Component {
                 <CounterControl label="Decrement" clicked={this.props.onDecrementCounter}  />
                 <CounterControl label="Add 5" clicked={this.props.onAddCounter}  />
                 <CounterControl label="Subtract 5" clicked={this.props.onSubstractCounter}  />
-                <button onClick={this.props.onSaveCounter}>Save counter</button>
+                <button onClick={()=> this.props.onSaveCounter(this.props.ctr)}>Save counter</button>
                 <ul>
                     {this.props.results.map(result => {
                         return (
@@ -49,18 +50,18 @@ class Counter extends Component {
 }
 const mapStateToProps = state => {
     return {
-        ctr: state.counter,
-        results: state.results, 
+        ctr: state.ctr.counter,
+        results: state.res.results, 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
-        onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
-        onAddCounter: () => dispatch({type: 'ADD', val: 5}),
-        onSubstractCounter: () => dispatch({type: 'SUBSTRACT', val: 5}),
-        onSaveCounter: () => dispatch({type: 'SAVE COUNTER'}),
-        onDeleteCounter: (id) => dispatch({type: 'DELETE COUNTER', idFromDispatch: id}),
+        onIncrementCounter: () => dispatch({type: actionTypes.INCREMENT}),
+        onDecrementCounter: () => dispatch({type: actionTypes.DECREMENT}),
+        onAddCounter: () => dispatch({type: actionTypes.ADD, val: 5}),
+        onSubstractCounter: () => dispatch({type: actionTypes.SUBSTRACT, val: 5}),
+        onSaveCounter: (resultFromState) => dispatch({type: actionTypes.SAVE_COUNTER, resultFromDispatch: resultFromState }),
+        onDeleteCounter: (id) => dispatch({type: actionTypes.DELETE_COUNTER, idFromDispatch: id}),
     };
 
 };

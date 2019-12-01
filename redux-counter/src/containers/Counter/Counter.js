@@ -30,19 +30,40 @@ class Counter extends Component {
         return (
             <div>
                 <CounterOutput value={this.props.ctr} />
-                <CounterControl label="Increment" clicked={() => this.counterChangedHandler( 'inc' )} />
-                <CounterControl label="Decrement" clicked={() => this.counterChangedHandler( 'dec' )}  />
-                <CounterControl label="Add 5" clicked={() => this.counterChangedHandler( 'add', 5 )}  />
-                <CounterControl label="Subtract 5" clicked={() => this.counterChangedHandler( 'sub', 5 )}  />
+                <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
+                <CounterControl label="Decrement" clicked={this.props.onDecrementCounter}  />
+                <CounterControl label="Add 5" clicked={this.props.onAddCounter}  />
+                <CounterControl label="Subtract 5" clicked={this.props.onSubstractCounter}  />
+                <button onClick={this.props.onSaveCounter}>Save counter</button>
+                <ul>
+                    {this.props.results.map(result => {
+                        return (
+                        <li key={result.id} onClick={()=>this.props.onDeleteCounter(result.id)}>{result.value}</li>
+                        )
+                    }
+                         )}
+                </ul>
             </div>
         );
     }
 }
 const mapStateToProps = state => {
     return {
-        ctr: state.counter
+        ctr: state.counter,
+        results: state.results, 
     };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
+        onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
+        onAddCounter: () => dispatch({type: 'ADD', val: 5}),
+        onSubstractCounter: () => dispatch({type: 'SUBSTRACT', val: 5}),
+        onSaveCounter: () => dispatch({type: 'SAVE COUNTER'}),
+        onDeleteCounter: (id) => dispatch({type: 'DELETE COUNTER', idFromDispatch: id}),
+    };
+
 };
 
 
-export default connect(mapStateToProps)(Counter);
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
